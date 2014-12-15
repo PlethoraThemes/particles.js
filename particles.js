@@ -8,7 +8,15 @@
 
 function launchParticlesJS(tag_id, params){
 
-  var canvas_el = document.querySelector('#'+tag_id+' > canvas');
+    if ( tag_id === "string" ){
+
+      var canvas_el = document.querySelector('#'+tag_id+' > canvas');
+
+    } else {
+
+      var canvas_el = tag_id.querySelector('canvas');
+
+    }
 
   /* particles.js variables with default values */
   pJS = {
@@ -542,3 +550,33 @@ window.particlesJS = function(tag_id, params){
   }
 
 };
+
+window.particlesInit = function( selector, params){
+
+  var elements = document.querySelectorAll( selector );
+
+  [].slice.apply( elements ).forEach(function( el ){
+
+    var particleCanvasContainer = document.createElement("div");
+        particleCanvasContainer.setAttribute("class","particles-js-container");
+
+      el.insertBefore( particleCanvasContainer, el.firstChild );
+
+    /* create canvas element */
+    var canvas_el = document.createElement('canvas');
+
+    /* set size canvas */
+    canvas_el.style.width = "100%";
+    canvas_el.style.height = "100%";
+
+    /* append canvas */
+    var canvas = particleCanvasContainer.appendChild(canvas_el);
+
+    /* launch particle.js */
+    if(canvas != null){
+      launchParticlesJS( particleCanvasContainer, params );
+    }
+
+  });
+
+}
