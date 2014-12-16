@@ -23,7 +23,8 @@ function launchParticlesJS(tag_id, params){
     canvas: {
       el: canvas_el,
       w: canvas_el.offsetWidth,
-      h: canvas_el.offsetHeight
+      h: canvas_el.offsetHeight,
+      bgc: ""
     },
     particles: {
       color: '#fff',
@@ -568,6 +569,12 @@ window.particlesInit = function( selector, params){
     /* set size canvas */
     canvas_el.style.width = "100%";
     canvas_el.style.height = "100%";
+
+    if ( typeof params.canvas !== "undefined" && typeof params.canvas.bgc !== "undefined" ){
+
+      canvas_el.style.backgroundColor = params.canvas.bgc;
+
+    }
 
     /* append canvas */
     var canvas = particleCanvasContainer.appendChild(canvas_el);
