@@ -6,18 +6,18 @@
 /* v1.0.3
 /* ----------------------------------------------- */
 
-function launchParticlesJS(tag_id, params){
+function launchParticlesJS( tag_id, params ){
 
-    if ( tag_id === "string" ){
-
-      var canvas_el = document.querySelector('#'+tag_id+' > canvas');
-
+  if ( params.group ){
+    var canvas_el = tag_id.querySelector('canvas');
+  } else {
+    if( !params.canvas ){
+        var canvas_el = document.querySelector('#'+tag_id+' > canvas');
     } else {
-
-      var canvas_el = tag_id.querySelector('canvas');
-
+        var canvas_el = params.canvas.el;
     }
-
+  }
+        
   /* particles.js variables with default values */
   pJS = {
     canvas: {
@@ -156,10 +156,17 @@ function launchParticlesJS(tag_id, params){
   };
 
   pJS.fn.canvasSize = function(){
-    pJS.canvas.el.width = pJS.canvas.w;
-    pJS.canvas.el.height = pJS.canvas.h;
+    if( !params.canvas ){
+        pJS.canvas.el.width = pJS.canvas.w;
+        pJS.canvas.el.height = pJS.canvas.h;
+    } else {
+        pJS.canvas.el.width = params.canvas.w;
+        pJS.canvas.el.height = params.canvas.h;
+        pJS.canvas.w = params.canvas.w;
+        pJS.canvas.h = params.canvas.h;
+    }
 
-    window.onresize = function(){
+      window.onresize = function(){
       if(pJS){
         pJS.canvas.w = pJS.canvas.el.offsetWidth;
         pJS.canvas.h = pJS.canvas.el.offsetHeight;
@@ -523,9 +530,9 @@ function hexToRgb(hex){
 /* --- LAUNCH --- */
 
 window.particlesJS = function(tag_id, params){
-
+    
   /* no string id? so it's object params, and set the id with default id */
-  if(typeof(tag_id) != 'string'){
+  if(typeof(tag_id) != 'string' && !tag_id.nodeType ){
     params = tag_id;
     tag_id = 'particles-js';
   }
@@ -534,7 +541,7 @@ window.particlesJS = function(tag_id, params){
   if(!tag_id){
     tag_id = 'particles-js';
   }
-
+    
   /* create canvas element */
   var canvas_el = document.createElement('canvas');
 
@@ -543,8 +550,16 @@ window.particlesJS = function(tag_id, params){
   canvas_el.style.height = "100%";
 
   /* append canvas */
-  var canvas = document.getElementById(tag_id).appendChild(canvas_el);
 
+  console.log( "tag_id", tag_id );
+  console.log( "params", params );
+
+  if ( !tag_id.nodeType ){
+      var canvas = document.getElementById(tag_id).appendChild(canvas_el);
+  } else {
+      var canvas = params.canvas.el;
+  }
+      
   /* launch particle.js */
   if(canvas != null){
     launchParticlesJS(tag_id, params);
@@ -552,7 +567,7 @@ window.particlesJS = function(tag_id, params){
 
 };
 
-window.particlesInit = function( selector, params){
+window.particlesInit = function( selector, params ){
 
   var elements = document.querySelectorAll( selector );
 
