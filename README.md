@@ -1,4 +1,9 @@
-## particles.js
+## particles.js [EXTENDED]
+
++ Added: Ability to create particles on a documentFragment and convert the resulting canvas to an image source,
+that can be used as a src attribute for an image element or as a background-image CSS value.
+
+This addition, was added in order for the particles to be used as a background image for the parallax effect.
 
 ### A lightweight JavaScript library for creating particles.
 
