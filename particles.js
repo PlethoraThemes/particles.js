@@ -8,16 +8,26 @@
 
 function launchParticlesJS( tag_id, params ){
 
+  var canvas_el;
+
   if ( params.group ){
-    var canvas_el = tag_id.querySelector('canvas');
+    canvas_el = tag_id.querySelector('canvas');
   } else {
     if( !params.canvas ){
-        var canvas_el = document.querySelector('#'+tag_id+' > canvas');
+        canvas_el = document.querySelector('#'+tag_id+' > canvas');
     } else {
-        var canvas_el = params.canvas.el;
+        canvas_el = params.canvas.el;
     }
   }
-        
+   
+  
+/*  if ( tag_id === "string" ){
+    var canvas_el = document.querySelector('#'+tag_id+' > canvas');
+  } else {
+    var canvas_el = tag_id.querySelector('canvas');
+  }
+*/
+
   /* particles.js variables with default values */
   pJS = {
     canvas: {
@@ -85,31 +95,31 @@ function launchParticlesJS( tag_id, params ){
       if(paramsForParticles.shape) pJS.particles.shape = paramsForParticles.shape;
       if(paramsForParticles.opacity) pJS.particles.opacity = paramsForParticles.opacity;
       if(paramsForParticles.size) pJS.particles.size = paramsForParticles.size;
-      if(paramsForParticles.size_random == false) pJS.particles.size_random = paramsForParticles.size_random;
+      if(paramsForParticles.size_random === false) pJS.particles.size_random = paramsForParticles.size_random;
       if(paramsForParticles.nb) pJS.particles.nb = paramsForParticles.nb;
       if(paramsForParticles.line_linked){
         var paramsForLineLinked = paramsForParticles.line_linked;
-        if(paramsForLineLinked.enable_auto == false) pJS.particles.line_linked.enable_auto = paramsForLineLinked.enable_auto;
+        if(paramsForLineLinked.enable_auto === false) pJS.particles.line_linked.enable_auto = paramsForLineLinked.enable_auto;
         if(paramsForLineLinked.distance) pJS.particles.line_linked.distance = paramsForLineLinked.distance;
         if(paramsForLineLinked.color) pJS.particles.line_linked.color = paramsForLineLinked.color;
         if(paramsForLineLinked.opacity) pJS.particles.line_linked.opacity = paramsForLineLinked.opacity;
         if(paramsForLineLinked.width) pJS.particles.line_linked.width = paramsForLineLinked.width;
         if(paramsForLineLinked.condensed_mode){
           var paramsForCondensedMode = paramsForLineLinked.condensed_mode;
-          if(paramsForCondensedMode.enable == false) pJS.particles.line_linked.condensed_mode.enable = paramsForCondensedMode.enable;
+          if(paramsForCondensedMode.enable === false) pJS.particles.line_linked.condensed_mode.enable = paramsForCondensedMode.enable;
           if(paramsForCondensedMode.rotateX) pJS.particles.line_linked.condensed_mode.rotateX = paramsForCondensedMode.rotateX;
           if(paramsForCondensedMode.rotateY) pJS.particles.line_linked.condensed_mode.rotateY = paramsForCondensedMode.rotateY;
         }
       }
       if(paramsForParticles.anim){
         var paramsForAnim = paramsForParticles.anim;
-        if(paramsForAnim.enable == false) pJS.particles.anim.enable = paramsForAnim.enable;
+        if(paramsForAnim.enable === false) pJS.particles.anim.enable = paramsForAnim.enable;
         if(paramsForAnim.speed) pJS.particles.anim.speed = paramsForAnim.speed;
       }
     }
     if(params.interactivity){
       var paramsForInteractivity = params.interactivity;
-      if(paramsForInteractivity.enable == false) pJS.interactivity.enable = paramsForInteractivity.enable;
+      if(paramsForInteractivity.enable === false) pJS.interactivity.enable = paramsForInteractivity.enable;
       if(paramsForInteractivity.mouse){
         if(paramsForInteractivity.mouse.distance) pJS.interactivity.mouse.distance = paramsForInteractivity.mouse.distance;
       }
@@ -122,7 +132,7 @@ function launchParticlesJS( tag_id, params ){
         var paramsForEvents = paramsForInteractivity.events;
         if(paramsForEvents.onclick){
           var paramsForOnclick = paramsForEvents.onclick;
-          if(paramsForOnclick.enable == false) pJS.interactivity.events.onclick.enable = false;
+          if(paramsForOnclick.enable === false) pJS.interactivity.events.onclick.enable = false;
           if(paramsForOnclick.mode != 'push') pJS.interactivity.events.onclick.mode = paramsForOnclick.mode;
           if(paramsForOnclick.nb) pJS.interactivity.events.onclick.nb = paramsForOnclick.nb;
         }
@@ -156,7 +166,7 @@ function launchParticlesJS( tag_id, params ){
   };
 
   pJS.fn.canvasSize = function(){
-    if( !params.canvas ){
+    if( params.group ){
         pJS.canvas.el.width = pJS.canvas.w;
         pJS.canvas.el.height = pJS.canvas.h;
     } else {
@@ -387,7 +397,7 @@ function launchParticlesJS( tag_id, params ){
     };
 
     /* el on onmouseleave */
-    detect_el.onmouseleave = function(e){
+    detect_el.onmouseleave = function(){
 
       if(pJS){
         pJS.interactivity.mouse.pos_x = 0;
@@ -401,7 +411,7 @@ function launchParticlesJS( tag_id, params ){
     if(pJS.interactivity.events.onclick.enable){
       switch(pJS.interactivity.events.onclick.mode){
         case 'push':
-          detect_el.onclick = function(e){
+          detect_el.onclick = function(){
             if(pJS){
               for(var i = 0; i < pJS.interactivity.events.onclick.nb; i++){
                 pJS.particles.array.push(
@@ -420,7 +430,7 @@ function launchParticlesJS( tag_id, params ){
         break;
 
         case 'remove':
-          detect_el.onclick = function(e){
+          detect_el.onclick = function(){
             pJS.particles.array.splice(0, pJS.interactivity.events.onclick.nb);
           }
         break;
@@ -551,9 +561,6 @@ window.particlesJS = function(tag_id, params){
 
   /* append canvas */
 
-  console.log( "tag_id", tag_id );
-  console.log( "params", params );
-
   if ( !tag_id.nodeType ){
       var canvas = document.getElementById(tag_id).appendChild(canvas_el);
   } else {
@@ -576,7 +583,7 @@ window.particlesInit = function( selector, params ){
     var particleCanvasContainer = document.createElement("div");
         particleCanvasContainer.setAttribute("class","particles-js-container");
 
-      el.insertBefore( particleCanvasContainer, el.firstChild );
+    el.insertBefore( particleCanvasContainer, el.firstChild );
 
     /* create canvas element */
     var canvas_el = document.createElement('canvas');
